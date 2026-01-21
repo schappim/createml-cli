@@ -1,10 +1,11 @@
 # createml-cli
 
-A native command-line interface for training Core ML models on macOS using Apple's Create ML framework. Train image classifiers, text classifiers, sound classifiers, and tabular models without Xcode or Python.
+A native command-line interface for training Core ML models on macOS using Apple's Create ML framework. Train image classifiers, object detectors, text classifiers, sound classifiers, and tabular models without Xcode or Python.
 
 ## Features
 
 - **Image Classification** - Train models from labeled image directories
+- **Object Detection** - Train models to detect and locate objects in images
 - **Text Classification** - Train sentiment analysis, spam detection, etc.
 - **Sound Classification** - Train audio classification models
 - **Tabular Classification/Regression** - Train models on CSV/JSON data
@@ -23,7 +24,7 @@ brew install createml-cli
 Download the latest release from [GitHub Releases](https://github.com/schappim/createml-cli/releases):
 
 ```bash
-curl -L https://github.com/schappim/createml-cli/releases/download/v1.0.0/createml-1.0.0-macos.tar.gz -o createml.tar.gz
+curl -L https://github.com/schappim/createml-cli/releases/download/v1.1.0/createml-1.1.0-macos.tar.gz -o createml.tar.gz
 tar -xzf createml.tar.gz
 sudo mv createml /usr/local/bin/
 ```
@@ -94,6 +95,85 @@ createml image training_data/ -o Model.mlmodel \
   --author "Your Name" \
   --description "Pet classifier model" \
   --no-augmentation \
+  --json
+```
+
+### Train an Object Detector
+
+Create a directory with images and an `annotations.json` file:
+
+```
+training_data/
+├── annotations.json
+└── images/
+    ├── image1.jpg
+    ├── image2.jpg
+    └── ...
+```
+
+The `annotations.json` file uses the Create ML format:
+
+```json
+[
+  {
+    "image": "images/image1.jpg",
+    "annotations": [
+      {
+        "label": "cat",
+        "coordinates": {"x": 100, "y": 150, "width": 200, "height": 180}
+      },
+      {
+        "label": "dog",
+        "coordinates": {"x": 400, "y": 200, "width": 150, "height": 200}
+      }
+    ]
+  },
+  {
+    "image": "images/image2.jpg",
+    "annotations": [
+      {
+        "label": "cat",
+        "coordinates": {"x": 50, "y": 80, "width": 300, "height": 250}
+      }
+    ]
+  }
+]
+```
+
+Train the model:
+
+```bash
+createml object-detect training_data/ -o PetDetector.mlmodel
+```
+
+Output:
+```
+Loading training data from training_data/...
+Configuring training parameters...
+Training object detector (max 500 iterations)...
+This may take a while depending on your dataset size...
+Saving model to PetDetector.mlmodel...
+
+Training Complete!
+==================================================
+
+Model saved to: PetDetector.mlmodel
+
+Classes: cat, dog
+
+Metrics (mAP @ IoU 0.5):
+  Training mAP:        85.50%
+  Validation mAP:      82.30%
+  Training duration:   342.15s
+```
+
+Options:
+```bash
+createml object-detect training_data/ -o Model.mlmodel \
+  --iterations 1000 \
+  --batch-size 16 \
+  --validation validation_data/ \
+  --author "Your Name" \
   --json
 ```
 
@@ -221,6 +301,7 @@ createml tabular data.csv -o Model.mlmodel \
 | Command | Description |
 |---------|-------------|
 | `createml image <dir> -o <output>` | Train image classifier |
+| `createml object-detect <dir> -o <output>` | Train object detector |
 | `createml text <csv> -o <output>` | Train text classifier |
 | `createml sound <dir> -o <output>` | Train sound classifier |
 | `createml tabular <csv> -o <output> -t <target>` | Train tabular model |
