@@ -1,14 +1,16 @@
 # createml-cli
 
-A native command-line interface for training Core ML models on macOS using Apple's Create ML framework. Train image classifiers, object detectors, text classifiers, sound classifiers, and tabular models without Xcode or Python.
+A native command-line interface for training Core ML models on macOS using Apple's Create ML framework. Train image classifiers, object detectors, text classifiers, word taggers, sound classifiers, tabular models, and recommendation systems without Xcode or Python.
 
 ## Features
 
 - **Image Classification** - Train models from labeled image directories
 - **Object Detection** - Train models to detect and locate objects in images
 - **Text Classification** - Train sentiment analysis, spam detection, etc.
+- **Word Tagging** - Train NER, POS tagging, and custom token labeling models
 - **Sound Classification** - Train audio classification models
 - **Tabular Classification/Regression** - Train models on CSV/JSON data
+- **Recommendation** - Train collaborative filtering recommendation models
 
 ## Installation
 
@@ -24,7 +26,7 @@ brew install createml-cli
 Download the latest release from [GitHub Releases](https://github.com/schappim/createml-cli/releases):
 
 ```bash
-curl -L https://github.com/schappim/createml-cli/releases/download/v1.1.0/createml-1.1.0-macos.tar.gz -o createml.tar.gz
+curl -L https://github.com/schappim/createml-cli/releases/download/v1.2.0/createml-1.2.0-macos.tar.gz -o createml.tar.gz
 tar -xzf createml.tar.gz
 sudo mv createml /usr/local/bin/
 ```
@@ -296,6 +298,121 @@ createml tabular data.csv -o Model.mlmodel \
   --json
 ```
 
+### Train a Word Tagger
+
+Word tagging is useful for Named Entity Recognition (NER), Part-of-Speech (POS) tagging, and other token-level classification tasks.
+
+Create a JSON file with `tokens` and `labels` arrays:
+
+```json
+[
+  {
+    "tokens": ["Apple", "is", "based", "in", "Cupertino"],
+    "labels": ["ORG", "O", "O", "O", "LOC"]
+  },
+  {
+    "tokens": ["Tim", "Cook", "is", "the", "CEO"],
+    "labels": ["PERSON", "PERSON", "O", "O", "O"]
+  }
+]
+```
+
+Train the model:
+
+```bash
+createml word-tag ner_data.json -o NERTagger.mlmodel
+```
+
+Output:
+```
+Loading training data from ner_data.json...
+Found 500 training examples...
+Training word tagger...
+Saving model to NERTagger.mlmodel...
+
+Training Complete!
+==================================================
+
+Model saved to: NERTagger.mlmodel
+
+Tags: LOC, O, ORG, PERSON
+
+Metrics:
+  Training accuracy:   96.50%
+  Training duration:   3.25s
+```
+
+Options:
+```bash
+createml word-tag data.json -o Model.mlmodel \
+  --token-column "words" \
+  --label-column "tags" \
+  --validation validation.json \
+  --author "Your Name" \
+  --json
+```
+
+### Train a Recommendation Model
+
+Train collaborative filtering models from user-item interaction data.
+
+Create a CSV file with user and item columns (and optionally ratings):
+
+```csv
+user,item,rating
+user1,movie_a,5
+user1,movie_b,3
+user2,movie_a,4
+user2,movie_c,5
+user3,movie_b,2
+```
+
+Train with explicit ratings:
+
+```bash
+createml recommend interactions.csv -o MovieRecommender.mlmodel --rating-column rating
+```
+
+For implicit feedback (no ratings, just interactions):
+
+```csv
+user,item
+user1,product_a
+user1,product_b
+user2,product_a
+user2,product_c
+```
+
+```bash
+createml recommend purchases.csv -o ProductRecommender.mlmodel
+```
+
+Output:
+```
+Loading training data from interactions.csv...
+Found 10000 interactions...
+Training recommender model...
+Saving model to MovieRecommender.mlmodel...
+
+Training Complete!
+==================================================
+
+Model saved to: MovieRecommender.mlmodel
+
+Metrics:
+  Training duration:   5.42s
+```
+
+Options:
+```bash
+createml recommend data.csv -o Model.mlmodel \
+  --user-column "customer_id" \
+  --item-column "product_id" \
+  --rating-column "stars" \
+  --author "Your Name" \
+  --json
+```
+
 ## Command Reference
 
 | Command | Description |
@@ -303,8 +420,10 @@ createml tabular data.csv -o Model.mlmodel \
 | `createml image <dir> -o <output>` | Train image classifier |
 | `createml object-detect <dir> -o <output>` | Train object detector |
 | `createml text <csv> -o <output>` | Train text classifier |
+| `createml word-tag <json> -o <output>` | Train word tagger (NER, POS, etc.) |
 | `createml sound <dir> -o <output>` | Train sound classifier |
 | `createml tabular <csv> -o <output> -t <target>` | Train tabular model |
+| `createml recommend <csv> -o <output>` | Train recommendation model |
 
 ### Algorithms
 
