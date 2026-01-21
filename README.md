@@ -456,6 +456,21 @@ createml text data.csv -o Model.mlmodel --json
 }
 ```
 
+## Examples
+
+The [examples](examples/) directory contains sample data and documentation for each model type:
+
+| Example | Description |
+|---------|-------------|
+| [text-classification](examples/text-classification/) | Sentiment analysis with CSV data |
+| [word-tagging](examples/word-tagging/) | Named Entity Recognition with JSON data |
+| [tabular-classification](examples/tabular-classification/) | Iris flower classification |
+| [tabular-regression](examples/tabular-regression/) | House price prediction |
+| [recommendation](examples/recommendation/) | Movie ratings and product recommendations |
+| [object-detection](examples/object-detection/) | Bounding box annotations format |
+| [image-classification](examples/image-classification/) | Directory structure guide |
+| [sound-classification](examples/sound-classification/) | Audio file organization guide |
+
 ## Using Trained Models
 
 Use your trained models with the [coreml-cli](https://github.com/schappim/coreml-cli) tool:

@@ -1,0 +1,51 @@
+user,item,rating
+user_1,The Matrix,5
+user_1,Inception,5
+user_1,Interstellar,4
+user_1,The Dark Knight,5
+user_1,Pulp Fiction,3
+user_2,The Matrix,4
+user_2,Inception,5
+user_2,The Godfather,5
+user_2,Goodfellas,4
+user_2,Pulp Fiction,5
+user_3,Toy Story,5
+user_3,Finding Nemo,5
+user_3,The Incredibles,4
+user_3,Up,5
+user_3,Wall-E,4
+user_4,The Matrix,5
+user_4,Blade Runner,5
+user_4,Alien,4
+user_4,Terminator,5
+user_4,Inception,4
+user_5,The Godfather,5
+user_5,Goodfellas,5
+user_5,Casino,4
+user_5,The Departed,5
+user_5,Pulp Fiction,4
+user_6,Toy Story,4
+user_6,Finding Nemo,4
+user_6,Shrek,5
+user_6,Monsters Inc,5
+user_6,Up,4
+user_7,The Matrix,3
+user_7,Inception,4
+user_7,Interstellar,5
+user_7,Arrival,5
+user_7,Blade Runner,4
+user_8,The Godfather,4
+user_8,The Dark Knight,5
+user_8,Inception,5
+user_8,Pulp Fiction,4
+user_8,Fight Club,5
+user_9,Toy Story,5
+user_9,Wall-E,5
+user_9,The Incredibles,5
+user_9,Coco,5
+user_9,Inside Out,5
+user_10,Alien,5
+user_10,Terminator,4
+user_10,The Matrix,4
+user_10,Blade Runner,5
+user_10,Predator,4
